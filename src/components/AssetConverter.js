@@ -2,9 +2,16 @@ import { useQuery } from "react-query"
 import InteractionHeader from "./InteractionHeader"
 import PairsList from "./PairsList"
 import styled from "styled-components"
+import { useState } from "react"
 
 export default function AssetConverter() {
   const assets = useQuery("assets", fetchSupportedAssets)
+  const [asset, setAsset] = useState({
+    code: "USD",
+    name: "US dollar",
+    type: "fiat",
+    image: "https://cdn.uphold.com/assets/USD.svg",
+  })
 
   async function fetchSupportedAssets() {
     let response
@@ -17,18 +24,26 @@ export default function AssetConverter() {
     if (!response.ok) throw new Error("Network response was not ok")
 
     let untrimmed = await response.json()
-
     let map = new Map()
-    untrimmed.forEach((u) => map.set(u.code, { code: u.code, image: u.image }))
+    untrimmed.forEach((u) =>
+      map.set(u.code, {
+        code: u.code,
+        name: u.name,
+        type: u.type,
+        image: u.image,
+      })
+    )
 
     return map
   }
 
-  console.log(assets.data)
-
   return (
     <S_Converter>
-      <InteractionHeader />
+      <InteractionHeader
+        asset={asset}
+        assetMap={assets.data}
+        setAsset={setAsset}
+      />
       <PairsList />
     </S_Converter>
   )

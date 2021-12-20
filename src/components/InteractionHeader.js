@@ -5,14 +5,37 @@ import CurrentAmount from "./CurrentAmount"
 import CurrentAsset from "./CurrentAsset"
 import { AssetSearcher } from "./AssetSearcher"
 import styled from "styled-components"
-import { useClickAway } from "react-use"
+import { useClickAway, useDebounce } from "react-use"
 
-export default function InteractionHeader() {
+export default function InteractionHeader(props) {
   const [amount, setAmount] = useState("")
   const [isOpen, setIsOpen] = useState(false)
   const [search, setSearch] = useState("")
   const isHoveringCurrentAsset = useRef(null)
   const assetSearcherRef = useRef(null)
+  const [filteredAssets, setFilteredAssets] = useState()
+
+  useDebounce(() => setFilteredAssets(getFilteredAssets()), 200, [
+    search,
+    props.assetMap,
+  ])
+
+  function getFilteredAssets() {
+    if (!props.assetMap) return
+
+    let assetArr = [...props.assetMap.values()]
+    if (search) {
+      const lcSearch = search.toLowerCase()
+      assetArr = assetArr.filter(
+        (a) =>
+          a.code.toLowerCase().includes(lcSearch) ||
+          a.name.toLowerCase().includes(lcSearch) ||
+          a.type.toLowerCase().includes(lcSearch)
+      )
+    }
+
+    return assetArr
+  }
 
   // Close searcher unless hovering currentAsset (let that component take over)
   useClickAway(assetSearcherRef, () => {
@@ -23,11 +46,17 @@ export default function InteractionHeader() {
     isHoveringCurrentAsset.current = isHovering
   }
 
+  function selectNewAsset(asset) {
+    setIsOpen(false)
+    props.setAsset(asset)
+  }
+
   return (
     <S_Wrapper>
       <S_CurrentWidget>
         <CurrentAmount amount={amount} setAmount={setAmount} />
         <CurrentAsset
+          asset={props.asset}
           setIsHoveringCurrentAsset={setIsHoveringCurrentAsset}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
@@ -36,6 +65,8 @@ export default function InteractionHeader() {
       {isOpen && (
         <AssetSearcher
           ref={assetSearcherRef}
+          assets={filteredAssets}
+          selectNewAsset={selectNewAsset}
           search={search}
           setSearch={setSearch}
         />

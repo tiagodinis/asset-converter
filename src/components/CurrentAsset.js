@@ -1,9 +1,9 @@
 import React from "react"
-import USDSVG from "./SVGComponents/USDSVG"
 import SmallArrowSVG from "./SVGComponents/SmallArrowSVG"
 import styled from "styled-components"
 
 export default function CurrentAsset({
+  asset,
   isOpen,
   setIsOpen,
   setIsHoveringCurrentAsset,
@@ -15,8 +15,8 @@ export default function CurrentAsset({
       onMouseLeave={() => setIsHoveringCurrentAsset(false)}
     >
       <S_BtnContent isOpen={isOpen}>
-        <USDSVG />
-        <S_Code>USD</S_Code>
+        <img src={asset.image} alt={`${asset.code} asset symbol`} />
+        <S_Code>{asset.code}</S_Code>
         <SmallArrowSVG />
       </S_BtnContent>
     </S_CurrentAssetBtn>
@@ -44,12 +44,12 @@ const S_BtnContent = styled.div`
   display: flex;
   align-items: center;
 
-  svg:first-child {
+  img {
     width: 28px;
     margin-right: 10px;
   }
 
-  svg:last-child {
+  svg {
     width: 12px;
     margin-left: 6px;
     fill: #3c4a5bff;

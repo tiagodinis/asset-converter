@@ -2,29 +2,37 @@ import React from "react"
 import MagnifyingGlassSVG from "./SVGComponents/MagnifyingGlassSVG"
 import styled from "styled-components"
 
-export const AssetSearcher = React.forwardRef(({ search, setSearch }, ref) => {
-  function handleSearchChange(e) {
-    setSearch(e.target.value)
-  }
+export const AssetSearcher = React.forwardRef(
+  ({ assets, selectNewAsset, search, setSearch }, ref) => {
+    function handleSearchChange(e) {
+      setSearch(e.target.value)
+    }
 
-  return (
-    <S_AssetSearcher ref={ref}>
-      <S_SearchBar>
-        <MagnifyingGlassSVG />
-        <S_Search
-          placeholder="Search asset"
-          value={search}
-          onChange={handleSearchChange}
-        />
-      </S_SearchBar>
-      <S_AssetOptions>
-        {[1, 2, 3, 4, 5, 6, 7].map((n) => (
-          <SAsset key={n}>{n}</SAsset>
-        ))}
-      </S_AssetOptions>
-    </S_AssetSearcher>
-  )
-})
+    return (
+      <S_AssetSearcher ref={ref}>
+        <S_SearchBar>
+          <MagnifyingGlassSVG />
+          <S_Search
+            placeholder="Search asset"
+            value={search}
+            onChange={handleSearchChange}
+          />
+        </S_SearchBar>
+        <S_AssetOptions>
+          {assets.map((a) => (
+            <S_Asset key={a.code} onClick={() => selectNewAsset(a)}>
+              <S_AssetLeft>
+                <img src={a.image} alt={`${a.code} asset symbol`} />
+                <div>{a.name}</div>
+              </S_AssetLeft>
+              <S_AssetRight>{a.code}</S_AssetRight>
+            </S_Asset>
+          ))}
+        </S_AssetOptions>
+      </S_AssetSearcher>
+    )
+  }
+)
 
 // STYLE
 const S_AssetSearcher = styled.div`
@@ -69,10 +77,34 @@ const S_AssetOptions = styled.div`
   overflow-y: auto;
 `
 
-const SAsset = styled.div`
+const S_Asset = styled.div`
   padding: 10px 15px;
+
+  cursor: pointer;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  img {
+    width: 40px;
+    margin-right: 20px;
+  }
 
   &:hover {
     background: white;
   }
+`
+
+const S_AssetLeft = styled.div`
+  font-size: 26px;
+  font-weight: 700;
+
+  display: flex;
+  align-items: center;
+`
+
+const S_AssetRight = styled.div`
+  font-size: 18px;
+  font-weight: 500;
 `
