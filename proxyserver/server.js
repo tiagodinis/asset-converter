@@ -9,16 +9,15 @@ const targetApi = "https://api-sandbox.uphold.com/v0"
 
 function setProxyRequest(uri) {
   app.get(uri, async (req, res) => {
-    const range = req.headers.range
     let options = {}
-    if (range) options = { headers: { Range: range } }
-    const response = await fetch(targetApi + uri, options)
+    if (req.headers.range) options = { headers: { Range: req.headers.range } }
+    const response = await fetch(targetApi + req.path, options)
     res.json(await response.json())
   })
 }
 
 setProxyRequest("/assets")
-setProxyRequest("/ticker/USD")
+setProxyRequest("/ticker/:currency")
 
 app.listen(3001, () => {
   console.log("Listening on port 3001")

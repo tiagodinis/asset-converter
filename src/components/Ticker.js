@@ -1,11 +1,12 @@
-import USDSVG from "./SVGComponents/USDSVG"
+import QuestionMarkSVG from "./SVGComponents/QuestionMarkSVG"
 import styled from "styled-components"
 
-export default function Ticker({ value }) {
+export default function Ticker({ amount, ticker }) {
   return (
     <S_Ticker>
-      <S_Value>{value}</S_Value>
-      <USDSVG />
+      <S_Value>{amount * ticker.bid}</S_Value>
+      {ticker.image && <img src={ticker.image} />}
+      {!ticker.image && <QuestionMarkSVG />}
     </S_Ticker>
   )
 }
@@ -19,15 +20,24 @@ const S_Ticker = styled.div`
   padding: 20px;
   border-radius: 1rem;
 
+  background: #ddd;
+
   display: flex;
-  justify-content: center;
+  justify-content: right;
+  align-items: center;
 
   svg {
-    width: 20px;
+    width: 40px;
+    margin-left: 20px;
+  }
+
+  img {
+    width: 40px;
     margin-left: 20px;
   }
 `
 
 const S_Value = styled.div`
   /* border: 1px solid black; */
+  font-size: 20px;
 `

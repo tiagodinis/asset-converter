@@ -1,6 +1,7 @@
+import React from "react"
 import styled from "styled-components"
 
-export default function CurrentAmount({ amount, setAmount }) {
+export const CurrentAmount = React.forwardRef(({ amount, setAmount }, ref) => {
   function handleAmountChange(e) {
     let enteredAmount = e.target.value
     let newAmount = ""
@@ -18,9 +19,14 @@ export default function CurrentAmount({ amount, setAmount }) {
   }
 
   return (
-    <S_Amount placeholder="0.00" value={amount} onChange={handleAmountChange} />
+    <S_Amount
+      ref={ref}
+      placeholder="0.00"
+      value={amount}
+      onChange={handleAmountChange}
+    />
   )
-}
+})
 
 // STYLE
 const S_Amount = styled.input`

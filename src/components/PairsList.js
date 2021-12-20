@@ -2,14 +2,11 @@ import React from "react"
 import styled from "styled-components"
 import Ticker from "./Ticker"
 
-export default function PairsList() {
+export default function PairsList({ amount, tickers }) {
   return (
     <S_Grid>
-      {Array(100)
-        .fill(0.000123012)
-        .map((v, index) => (
-          <Ticker key={index} value={v} />
-        ))}
+      {tickers &&
+        tickers.map((t) => <Ticker key={t.code} amount={amount} ticker={t} />)}
     </S_Grid>
   )
 }

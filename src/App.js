@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from "react-query"
 import { GlobalStyle } from "./styles/GlobalStyle"
-import AssetConverter from "./components/AssetConverter"
+import Converter from "./components/Converter"
+// import { ReactQueryDevtools } from "react-query/devtools"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -14,7 +15,8 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <GlobalStyle />
-      <AssetConverter />
+      <Converter />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>
   )
 }

@@ -1,29 +1,36 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRef } from "react"
 
-import CurrentAmount from "./CurrentAmount"
+import { CurrentAmount } from "./CurrentAmount"
 import CurrentAsset from "./CurrentAsset"
 import { AssetSearcher } from "./AssetSearcher"
 import styled from "styled-components"
 import { useClickAway, useDebounce } from "react-use"
 
-export default function InteractionHeader(props) {
-  const [amount, setAmount] = useState("")
+export default function InteractionHeader({
+  amount,
+  setAmount,
+  assetMap,
+  asset,
+  setAsset,
+}) {
   const [isOpen, setIsOpen] = useState(false)
   const [search, setSearch] = useState("")
   const isHoveringCurrentAsset = useRef(null)
+  const currentAmountRef = useRef(null)
   const assetSearcherRef = useRef(null)
+  const searchBarRef = useRef(null)
   const [filteredAssets, setFilteredAssets] = useState()
 
-  useDebounce(() => setFilteredAssets(getFilteredAssets()), 200, [
+  useDebounce(() => setFilteredAssets(getFilteredAssets()), 250, [
     search,
-    props.assetMap,
+    assetMap,
   ])
 
   function getFilteredAssets() {
-    if (!props.assetMap) return
+    if (!assetMap) return
 
-    let assetArr = [...props.assetMap.values()]
+    let assetArr = [...assetMap.values()]
     if (search) {
       const lcSearch = search.toLowerCase()
       assetArr = assetArr.filter(
@@ -48,28 +55,41 @@ export default function InteractionHeader(props) {
 
   function selectNewAsset(asset) {
     setIsOpen(false)
-    props.setAsset(asset)
+    setAsset(asset)
   }
+
+  // Set initial focus based on asset search state
+  useEffect(() => {
+    if (isOpen) searchBarRef.current.focus()
+    else currentAmountRef.current.focus()
+  }, [isOpen])
 
   return (
     <S_Wrapper>
       <S_CurrentWidget>
-        <CurrentAmount amount={amount} setAmount={setAmount} />
+        <CurrentAmount
+          ref={currentAmountRef}
+          amount={amount}
+          setAmount={setAmount}
+        />
         <CurrentAsset
-          asset={props.asset}
+          asset={asset}
           setIsHoveringCurrentAsset={setIsHoveringCurrentAsset}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
         />
       </S_CurrentWidget>
+
       {isOpen && (
-        <AssetSearcher
-          ref={assetSearcherRef}
-          assets={filteredAssets}
-          selectNewAsset={selectNewAsset}
-          search={search}
-          setSearch={setSearch}
-        />
+        <S_AssetSearcher ref={assetSearcherRef}>
+          <AssetSearcher
+            ref={searchBarRef}
+            assets={filteredAssets}
+            selectNewAsset={selectNewAsset}
+            search={search}
+            setSearch={setSearch}
+          />
+        </S_AssetSearcher>
       )}
     </S_Wrapper>
   )
@@ -94,4 +114,14 @@ const S_CurrentWidget = styled.div`
 
   display: flex;
   align-items: center;
+`
+
+const S_AssetSearcher = styled.div`
+  position: absolute;
+  top: calc(100% + 20px);
+
+  width: 100%;
+
+  background: #f5f9fcff;
+  border-radius: 8px;
 `

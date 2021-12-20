@@ -9,42 +9,35 @@ export const AssetSearcher = React.forwardRef(
     }
 
     return (
-      <S_AssetSearcher ref={ref}>
+      <>
         <S_SearchBar>
           <MagnifyingGlassSVG />
           <S_Search
+            ref={ref}
             placeholder="Search asset"
             value={search}
             onChange={handleSearchChange}
           />
         </S_SearchBar>
+
         <S_AssetOptions>
-          {assets.map((a) => (
-            <S_Asset key={a.code} onClick={() => selectNewAsset(a)}>
-              <S_AssetLeft>
-                <img src={a.image} alt={`${a.code} asset symbol`} />
-                <div>{a.name}</div>
-              </S_AssetLeft>
-              <S_AssetRight>{a.code}</S_AssetRight>
-            </S_Asset>
-          ))}
+          {assets &&
+            assets.map((a) => (
+              <S_Asset key={a.code} onClick={() => selectNewAsset(a)}>
+                <S_AssetLeft>
+                  <img src={a.image} alt={`${a.code} asset symbol`} />
+                  <div>{a.name}</div>
+                </S_AssetLeft>
+                <S_AssetRight>{a.code}</S_AssetRight>
+              </S_Asset>
+            ))}
         </S_AssetOptions>
-      </S_AssetSearcher>
+      </>
     )
   }
 )
 
 // STYLE
-const S_AssetSearcher = styled.div`
-  position: absolute;
-  top: calc(100% + 20px);
-
-  width: 100%;
-
-  background: #f5f9fcff;
-  border-radius: 8px;
-`
-
 const S_SearchBar = styled.div`
   margin: 10px;
 
