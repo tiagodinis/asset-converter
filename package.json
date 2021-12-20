@@ -25,7 +25,9 @@
       "react-app",
       "react-app/jest",
       "plugin:prettier/recommended"
-    ]
+    ], "rules": {
+      "react/jsx-pascal-case": 0
+    }
   },
   "browserslist": {
     "production": [
