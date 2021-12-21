@@ -2,16 +2,19 @@ import React from "react"
 import styled from "styled-components"
 import { minTickerWidth, gridRange } from "../styles/styledConstants"
 import { clampedLerp } from "../utilities/styledHelpers"
+import FadeIn from "./HOCs/FadeIn"
 import Throbber from "./Throbber"
 import Ticker from "./Ticker"
 
 export default function PairsList({ amount, tickers }) {
   return tickers ? (
-    <S_Grid>
-      {tickers.map((t) => (
-        <Ticker key={t.code} amount={amount} ticker={t} />
-      ))}
-    </S_Grid>
+    <FadeIn duration={1000}>
+      <S_Grid>
+        {tickers.map((t) => (
+          <Ticker key={t.code} amount={amount} ticker={t} />
+        ))}
+      </S_Grid>
+    </FadeIn>
   ) : (
     <S_ThrobberWrapper>
       <Throbber />

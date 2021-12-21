@@ -3,6 +3,7 @@ import styled from "styled-components"
 import { cleanAmount, formatAmount } from "../utilities/amountFormatting"
 import { minTickerWidth, tickerRange } from "../styles/styledConstants"
 import { clampedLerp } from "../utilities/styledHelpers"
+import FadeIn from "./HOCs/FadeIn"
 
 export default function Ticker({ amount, ticker }) {
   function getTickerValue() {
@@ -20,7 +21,9 @@ export default function Ticker({ amount, ticker }) {
     <S_Ticker>
       <S_Left>
         {ticker.image && (
-          <img src={ticker.image} alt={`${ticker.code} asset symbol`} />
+          <FadeIn>
+            <img src={ticker.image} alt={`${ticker.code} asset symbol`} />
+          </FadeIn>
         )}
         {!ticker.image && <QuestionMarkSVG />}
         <div>{getTickerValue()}</div>

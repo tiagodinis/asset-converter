@@ -4,6 +4,7 @@ import styled from "styled-components"
 import Throbber from "./Throbber"
 import { tickerRange } from "../styles/styledConstants"
 import { clampedLerp } from "../utilities/styledHelpers"
+import FadeIn from "./HOCs/FadeIn"
 
 export const AssetSearcher = React.forwardRef(
   ({ assets, selectNewAsset, search, setSearch }, ref) => {
@@ -13,26 +14,29 @@ export const AssetSearcher = React.forwardRef(
 
     return (
       <>
-        <S_SearchBar>
-          <MagnifyingGlassSVG />
-          <S_Search
-            ref={ref}
-            placeholder="Search asset"
-            value={search}
-            onChange={handleSearchChange}
-          />
-        </S_SearchBar>
-
+        <FadeIn>
+          <S_SearchBar>
+            <MagnifyingGlassSVG />
+            <S_Search
+              ref={ref}
+              placeholder="Search asset"
+              value={search}
+              onChange={handleSearchChange}
+            />
+          </S_SearchBar>
+        </FadeIn>
         <S_AssetOptions>
           {assets &&
             assets.map((a) => (
-              <S_Asset key={a.code} onClick={() => selectNewAsset(a)}>
-                <S_AssetLeft>
-                  <img src={a.image} alt={`${a.code} asset symbol`} />
-                  <div>{a.name}</div>
-                </S_AssetLeft>
-                <S_AssetRight>{a.code}</S_AssetRight>
-              </S_Asset>
+              <FadeIn>
+                <S_Asset key={a.code} onClick={() => selectNewAsset(a)}>
+                  <S_AssetLeft>
+                    <img src={a.image} alt={`${a.code} asset symbol`} />
+                    <div>{a.name}</div>
+                  </S_AssetLeft>
+                  <S_AssetRight>{a.code}</S_AssetRight>
+                </S_Asset>
+              </FadeIn>
             ))}
           {!assets && (
             <S_ThrobberWrapper>
