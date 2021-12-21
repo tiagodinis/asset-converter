@@ -1,36 +1,38 @@
 import React from "react"
 import styled from "styled-components"
 
-export const CurrentAmount = React.forwardRef(({ amount, setAmount }, ref) => {
-  function handleAmountChange(e) {
-    let enteredAmount = e.target.value
-    let newAmount = ""
-    let dotPos
-    for (let i = 0; i < enteredAmount.length; ++i) {
-      let char = enteredAmount[i]
-      if (char >= "0" && char <= "9") newAmount += char
-      if (char === "." && !dotPos) {
-        dotPos = i
-        newAmount += char
+export const CurrentAmount = React.forwardRef(
+  ({ asset, amount, setAmount }, ref) => {
+    function handleAmountChange(e) {
+      let enteredAmount = e.target.value
+      let newAmount = ""
+      let dotPos
+      for (let i = 0; i < enteredAmount.length; ++i) {
+        let char = enteredAmount[i]
+        if (char >= "0" && char <= "9") newAmount += char
+        if (char === "." && !dotPos) {
+          dotPos = i
+          newAmount += char
+        }
       }
+
+      setAmount(newAmount)
     }
 
-    setAmount(newAmount)
+    return (
+      <S_Amount
+        ref={ref}
+        placeholder="0.00"
+        value={amount}
+        onChange={handleAmountChange}
+      />
+    )
   }
-
-  return (
-    <S_Amount
-      ref={ref}
-      placeholder="0.00"
-      value={amount}
-      onChange={handleAmountChange}
-    />
-  )
-})
+)
 
 // STYLE
 const S_Amount = styled.input`
-  width: 300px;
+  width: 100%;
 
   outline: none;
   border: none;

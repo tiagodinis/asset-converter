@@ -4,9 +4,14 @@ import styled from "styled-components"
 export default function Ticker({ amount, ticker }) {
   return (
     <S_Ticker>
-      <S_Value>{amount * ticker.bid}</S_Value>
-      {ticker.image && <img src={ticker.image} />}
-      {!ticker.image && <QuestionMarkSVG />}
+      <div>
+        {ticker.image && (
+          <img src={ticker.image} alt={`${ticker.code} asset symbol`} />
+        )}
+        {!ticker.image && <QuestionMarkSVG />}
+        {amount * ticker.bid}
+      </div>
+      {ticker.code}
     </S_Ticker>
   )
 }
@@ -15,16 +20,21 @@ export default function Ticker({ amount, ticker }) {
 const minElementWidth = 300
 
 const S_Ticker = styled.div`
-  /* border: 1px solid black; */
   min-width: ${minElementWidth}px;
   padding: 20px;
   border-radius: 1rem;
 
   background: #ddd;
+  font-size: 20px;
 
   display: flex;
-  justify-content: right;
+  justify-content: space-between;
   align-items: center;
+
+  div {
+    display: flex;
+    align-items: center;
+  }
 
   svg {
     width: 40px;
@@ -33,11 +43,6 @@ const S_Ticker = styled.div`
 
   img {
     width: 40px;
-    margin-left: 20px;
+    margin-right: 20px;
   }
-`
-
-const S_Value = styled.div`
-  /* border: 1px solid black; */
-  font-size: 20px;
 `

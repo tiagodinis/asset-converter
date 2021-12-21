@@ -69,6 +69,7 @@ export default function InteractionHeader({
       <S_CurrentWidget>
         <CurrentAmount
           ref={currentAmountRef}
+          asset={asset}
           amount={amount}
           setAmount={setAmount}
         />
@@ -107,6 +108,7 @@ const S_CurrentWidget = styled.div`
   margin-top: 80px;
   padding: 12px 16px;
 
+  width: 500px;
   height: fit-content;
 
   background: #f5f9fcff;
