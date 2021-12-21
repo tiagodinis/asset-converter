@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react"
-import { useRef } from "react"
-
+import { useEffect, useState, useRef } from "react"
+import { useClickAway, useDebounce } from "react-use"
 import { CurrentAmount } from "./CurrentAmount"
 import CurrentAsset from "./CurrentAsset"
 import { AssetSearcher } from "./AssetSearcher"
 import styled from "styled-components"
-import { useClickAway, useDebounce } from "react-use"
 
 export default function InteractionHeader({
   amount,

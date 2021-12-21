@@ -8,7 +8,14 @@ import ThemeToggler from "./ThemeToggler"
 
 const initialAsset = {
   code: "USD",
-  name: "US dollar",
+  name: "US Dollar",
+  symbol: "$",
+  formatting: {
+    decimal: ".",
+    format: "symbol value code",
+    grouping: ",",
+    precision: "2",
+  },
   type: "fiat",
   image: "https://cdn.uphold.com/assets/USD.svg",
 }

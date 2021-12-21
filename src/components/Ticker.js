@@ -1,7 +1,19 @@
 import QuestionMarkSVG from "./SVGComponents/QuestionMarkSVG"
 import styled from "styled-components"
+import { cleanAmount, formatAmount } from "../utilities/formatting"
 
 export default function Ticker({ amount, ticker }) {
+  function getTickerValue() {
+    let res = amount * ticker.bid
+    if (amount) {
+      let precision = ticker.formatting?.precision
+      res = cleanAmount(res.toString(), precision ? precision : Infinity)
+      res = formatAmount(res)
+    }
+
+    return res
+  }
+
   return (
     <S_Ticker>
       <div>
@@ -9,7 +21,7 @@ export default function Ticker({ amount, ticker }) {
           <img src={ticker.image} alt={`${ticker.code} asset symbol`} />
         )}
         {!ticker.image && <QuestionMarkSVG />}
-        {amount * ticker.bid}
+        {getTickerValue()}
       </div>
       {ticker.code}
     </S_Ticker>

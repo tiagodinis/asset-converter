@@ -21,19 +21,19 @@ export default function useUpholdData(asset) {
 
   async function fetchSupportedAssets() {
     let untrimmed = await fetchResources("assets")
-
-    let map = new Map()
+    let assetMap = new Map()
     untrimmed.forEach((u) =>
-      map.set(u.code, {
+      assetMap.set(u.code, {
         code: u.code,
         name: u.name,
+        symbol: u.symbol,
         formatting: u.formatting,
         type: u.type,
         image: u.image,
       })
     )
 
-    return map
+    return assetMap
   }
 
   async function fetchTickersByAsset() {
@@ -51,6 +51,7 @@ export default function useUpholdData(asset) {
         code: code,
         ask: u.ask,
         bid: u.bid,
+        formatting: assets.data.get(code)?.formatting,
         image: assets.data.get(code)?.image,
       })
     })

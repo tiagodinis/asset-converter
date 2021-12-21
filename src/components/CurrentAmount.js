@@ -1,29 +1,23 @@
-import React from "react"
+import React, { useRef } from "react"
 import styled from "styled-components"
+import { cleanAmount, formatAmount } from "../utilities/formatting"
 
 export const CurrentAmount = React.forwardRef(
   ({ asset, amount, setAmount }, ref) => {
-    function handleAmountChange(e) {
-      let enteredAmount = e.target.value
-      let newAmount = ""
-      let dotPos
-      for (let i = 0; i < enteredAmount.length; ++i) {
-        let char = enteredAmount[i]
-        if (char >= "0" && char <= "9") newAmount += char
-        if (char === "." && !dotPos) {
-          dotPos = i
-          newAmount += char
-        }
-      }
+    const formattedAmount = useRef(formatAmount(amount))
 
-      setAmount(newAmount)
+    function handleAmountChange(e) {
+      let cleanedStr = cleanAmount(e.target.value, asset.formatting.precision)
+      setAmount(cleanedStr)
+
+      formattedAmount.current = formatAmount(cleanedStr)
     }
 
     return (
       <S_Amount
         ref={ref}
-        placeholder="0.00"
-        value={amount}
+        placeholder="0"
+        value={formattedAmount.current}
         onChange={handleAmountChange}
       />
     )
