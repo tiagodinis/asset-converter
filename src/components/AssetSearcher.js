@@ -1,6 +1,7 @@
 import React from "react"
 import MagnifyingGlassSVG from "./SVGComponents/MagnifyingGlassSVG"
 import styled from "styled-components"
+import Throbber from "./Throbber"
 
 export const AssetSearcher = React.forwardRef(
   ({ assets, selectNewAsset, search, setSearch }, ref) => {
@@ -31,6 +32,11 @@ export const AssetSearcher = React.forwardRef(
                 <S_AssetRight>{a.code}</S_AssetRight>
               </S_Asset>
             ))}
+          {!assets && (
+            <S_ThrobberWrapper>
+              <Throbber />
+            </S_ThrobberWrapper>
+          )}
         </S_AssetOptions>
       </>
     )
@@ -38,6 +44,7 @@ export const AssetSearcher = React.forwardRef(
 )
 
 // STYLE
+
 const S_SearchBar = styled.div`
   margin: 10px;
 
@@ -107,4 +114,8 @@ const S_AssetLeft = styled.div`
 const S_AssetRight = styled.div`
   font-size: 18px;
   font-weight: 500;
+`
+
+const S_ThrobberWrapper = styled.div`
+  padding: 20px;
 `

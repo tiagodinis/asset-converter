@@ -1,23 +1,33 @@
 import React from "react"
 import styled from "styled-components"
+import Throbber from "./Throbber"
 import Ticker from "./Ticker"
 
 export default function PairsList({ amount, tickers }) {
-  return (
+  return tickers ? (
     <S_Grid>
-      {tickers &&
-        tickers.map((t) => <Ticker key={t.code} amount={amount} ticker={t} />)}
+      {tickers.map((t) => (
+        <Ticker key={t.code} amount={amount} ticker={t} />
+      ))}
     </S_Grid>
+  ) : (
+    <S_ThrobberWrapper>
+      <Throbber />
+    </S_ThrobberWrapper>
   )
 }
 
 // STYLE
 const minElementWidth = 300
 
-const S_Grid = styled.div`
-  /* border: 1px solid black; */
+const topMargin = 40
 
-  margin: 40px 0px;
+const S_ThrobberWrapper = styled.div`
+  margin: ${topMargin}px 0px;
+`
+
+const S_Grid = styled.div`
+  margin: ${topMargin}px 0px;
   width: min(1000px, 80%);
 
   display: grid;

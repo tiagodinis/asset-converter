@@ -5,11 +5,12 @@ export function cleanAmount(str, precision) {
 
   // Trim left zeros
   // * Add 1 if "." as first char
-  // * Keep 1 if only 1 zero
+  // * Keep 1 if "0" or "0."
   current = ""
   let i = 0
   for (; prev[i] === "0" && i < prev.length; ++i);
-  if (prev[0] === "." || prev[0] === "0") current = "0"
+  if (prev[0] === ".") current = "0"
+  if (prev[0] === "0" && (prev.length === 1 || prev[1] === ".")) current = "0"
   current += prev.slice(i)
 
   // No more than 1 "."

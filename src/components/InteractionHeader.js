@@ -124,4 +124,6 @@ const S_AssetSearcher = styled.div`
 
   background: ${({ theme }) => theme.header};
   border-radius: 8px;
+
+  z-index: 1;
 `

@@ -11,6 +11,7 @@ export const lightTheme = {
   header: "#E4EAF2",
   headerFont: "#3C4A5B",
   assetHover: "#F5F9FC",
+  loadingCircle: "#3C4A5B",
 }
 
 export const darkTheme = {
@@ -21,4 +22,5 @@ export const darkTheme = {
   header: "#3C4A5B",
   headerFont: "#F5F9FC",
   assetHover: "#2c3646",
+  loadingCircle: "#68778D",
 }
