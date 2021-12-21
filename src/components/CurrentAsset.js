@@ -27,14 +27,14 @@ export default function CurrentAsset({
 const S_CurrentAssetBtn = styled.button`
   margin-left: 16px;
 
-  background: white;
+  background: ${({ theme }) => theme.BG};
   border: none;
   border-radius: 100vw;
 
   cursor: pointer;
 
   &:hover {
-    background: #eceff2;
+    background: ${({ theme }) => theme.assetHover};
   }
 `
 
@@ -52,7 +52,7 @@ const S_BtnContent = styled.div`
   svg {
     width: 12px;
     margin-left: 6px;
-    fill: #3c4a5bff;
+    fill: ${({ theme }) => theme.tickerFont};
     transform: rotate(${({ isOpen }) => (isOpen ? "180deg" : "0deg")});
   }
 `
@@ -60,5 +60,5 @@ const S_BtnContent = styled.div`
 const S_Code = styled.div`
   font-size: 18px;
   font-weight: 500;
-  color: #3c4a5bff;
+  color: ${({ theme }) => theme.tickerFont};
 `

@@ -17,7 +17,7 @@ const minElementWidth = 300
 const S_Grid = styled.div`
   /* border: 1px solid black; */
 
-  margin-top: 20px;
+  margin: 40px 0px;
   width: min(1000px, 80%);
 
   display: grid;

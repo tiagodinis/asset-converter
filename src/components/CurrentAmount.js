@@ -36,8 +36,8 @@ const S_Amount = styled.input`
 
   outline: none;
   border: none;
-  background: #f5f9fcff;
+  background: ${({ theme }) => theme.header};
 
   font-size: 44px;
-  color: #3c4a5bff;
+  color: ${({ theme }) => theme.headerFont};
 `

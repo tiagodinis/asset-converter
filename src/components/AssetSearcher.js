@@ -44,19 +44,24 @@ const S_SearchBar = styled.div`
   height: 50px;
 
   border-radius: 10px;
-  background: white;
+  background: ${({ theme }) => theme.BG};
 
   display: flex;
 
   svg {
     width: 30px;
     margin-left: 12px;
+    fill: ${({ theme }) => theme.tickerFont};
   }
 `
 
 const S_Search = styled.input`
   outline: none;
   border: none;
+
+  background: ${({ theme }) => theme.BG};
+  font-size: 14px;
+  color: ${({ theme }) => theme.tickerFont};
 
   margin: 10px;
   flex-grow: 1;
@@ -75,6 +80,8 @@ const S_Asset = styled.div`
 
   cursor: pointer;
 
+  color: ${({ theme }) => theme.headerFont};
+
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -85,7 +92,7 @@ const S_Asset = styled.div`
   }
 
   &:hover {
-    background: white;
+    background: ${({ theme }) => theme.assetHover};
   }
 `
 

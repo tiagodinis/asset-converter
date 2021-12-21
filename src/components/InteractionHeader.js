@@ -111,7 +111,7 @@ const S_CurrentWidget = styled.div`
   width: 500px;
   height: fit-content;
 
-  background: #f5f9fcff;
+  background: ${({ theme }) => theme.header};
   border-radius: 8px;
 
   display: flex;
@@ -124,6 +124,6 @@ const S_AssetSearcher = styled.div`
 
   width: 100%;
 
-  background: #f5f9fcff;
+  background: ${({ theme }) => theme.header};
   border-radius: 8px;
 `

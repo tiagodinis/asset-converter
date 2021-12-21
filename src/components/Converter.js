@@ -4,6 +4,7 @@ import styled from "styled-components"
 import { useState } from "react"
 import { useDebounce } from "react-use"
 import useUpholdData from "../hooks/useUpholdData"
+import ThemeToggler from "./ThemeToggler"
 
 const initialAsset = {
   code: "USD",
@@ -12,7 +13,7 @@ const initialAsset = {
   image: "https://cdn.uphold.com/assets/USD.svg",
 }
 
-export default function Converter() {
+export default function Converter({ setTheme }) {
   const [asset, setAsset] = useState(initialAsset)
   const [amount, setAmount] = useState("")
   const [debouncedAmount, setDebouncedAmount] = useState("")
@@ -30,6 +31,7 @@ export default function Converter() {
         setAsset={setAsset}
       />
       <PairsList amount={debouncedAmount} tickers={tickers.data?.pairs} />
+      <ThemeToggler setTheme={setTheme} />
     </S_Converter>
   )
 }

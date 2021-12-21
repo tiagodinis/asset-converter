@@ -24,8 +24,9 @@ const S_Ticker = styled.div`
   padding: 20px;
   border-radius: 1rem;
 
-  background: #ddd;
+  border: 2px solid ${({ theme }) => theme.tickerBorder};
   font-size: 20px;
+  color: ${({ theme }) => theme.tickerFont};
 
   display: flex;
   justify-content: space-between;
@@ -38,7 +39,7 @@ const S_Ticker = styled.div`
 
   svg {
     width: 40px;
-    margin-left: 20px;
+    margin-right: 20px;
   }
 
   img {
