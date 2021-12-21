@@ -1,6 +1,8 @@
 import React, { useRef } from "react"
 import styled from "styled-components"
-import { cleanAmount, formatAmount } from "../utilities/formatting"
+import { cleanAmount, formatAmount } from "../utilities/amountFormatting"
+import { tickerRange } from "../styles/styledConstants"
+import { clampedLerp } from "../utilities/styledHelpers"
 
 export const CurrentAmount = React.forwardRef(
   ({ asset, amount, setAmount }, ref) => {
@@ -32,6 +34,6 @@ const S_Amount = styled.input`
   border: none;
   background: ${({ theme }) => theme.header};
 
-  font-size: 44px;
+  font-size: ${clampedLerp(16, 44, ...tickerRange, "px")};
   color: ${({ theme }) => theme.headerFont};
 `

@@ -2,6 +2,8 @@ import React from "react"
 import MagnifyingGlassSVG from "./SVGComponents/MagnifyingGlassSVG"
 import styled from "styled-components"
 import Throbber from "./Throbber"
+import { tickerRange } from "../styles/styledConstants"
+import { clampedLerp } from "../utilities/styledHelpers"
 
 export const AssetSearcher = React.forwardRef(
   ({ assets, selectNewAsset, search, setSearch }, ref) => {
@@ -44,20 +46,22 @@ export const AssetSearcher = React.forwardRef(
 )
 
 // STYLE
+const _10 = clampedLerp(5, 10, ...tickerRange, "px")
+const _20 = clampedLerp(10, 20, ...tickerRange, "px")
 
 const S_SearchBar = styled.div`
-  margin: 10px;
+  margin: ${_10}px;
 
-  height: 50px;
+  height: ${clampedLerp(40, 50, ...tickerRange, "px")};
 
-  border-radius: 10px;
+  border-radius: ${_10}px;
   background: ${({ theme }) => theme.BG};
 
   display: flex;
 
   svg {
     width: 30px;
-    margin-left: 12px;
+    margin-left: ${clampedLerp(6, 12, ...tickerRange, "px")};
     fill: ${({ theme }) => theme.tickerFont};
   }
 `
@@ -70,12 +74,12 @@ const S_Search = styled.input`
   font-size: 14px;
   color: ${({ theme }) => theme.tickerFont};
 
-  margin: 10px;
+  margin: ${_10}px;
   flex-grow: 1;
 `
 
 const S_AssetOptions = styled.div`
-  margin: 10px 0px;
+  margin: ${_10}px 0px;
 
   max-height: 300px;
 
@@ -83,7 +87,7 @@ const S_AssetOptions = styled.div`
 `
 
 const S_Asset = styled.div`
-  padding: 10px 15px;
+  padding: ${_10}px 15px;
 
   cursor: pointer;
 
@@ -94,8 +98,8 @@ const S_Asset = styled.div`
   align-items: center;
 
   img {
-    width: 40px;
-    margin-right: 20px;
+    width: ${clampedLerp(30, 40, ...tickerRange, "px")};
+    margin-right: ${_20}px;
   }
 
   &:hover {
@@ -104,7 +108,7 @@ const S_Asset = styled.div`
 `
 
 const S_AssetLeft = styled.div`
-  font-size: 26px;
+  font-size: ${clampedLerp(18, 26, ...tickerRange, "px")};
   font-weight: 700;
 
   display: flex;
@@ -117,5 +121,5 @@ const S_AssetRight = styled.div`
 `
 
 const S_ThrobberWrapper = styled.div`
-  padding: 20px;
+  padding: ${_20}px;
 `

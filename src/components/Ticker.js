@@ -1,6 +1,8 @@
 import QuestionMarkSVG from "./SVGComponents/QuestionMarkSVG"
 import styled from "styled-components"
-import { cleanAmount, formatAmount } from "../utilities/formatting"
+import { cleanAmount, formatAmount } from "../utilities/amountFormatting"
+import { minTickerWidth, tickerRange } from "../styles/styledConstants"
+import { clampedLerp } from "../utilities/styledHelpers"
 
 export default function Ticker({ amount, ticker }) {
   function getTickerValue() {
@@ -16,46 +18,59 @@ export default function Ticker({ amount, ticker }) {
 
   return (
     <S_Ticker>
-      <div>
+      <S_Left>
         {ticker.image && (
           <img src={ticker.image} alt={`${ticker.code} asset symbol`} />
         )}
         {!ticker.image && <QuestionMarkSVG />}
-        {getTickerValue()}
-      </div>
+        <div>{getTickerValue()}</div>
+      </S_Left>
       {ticker.code}
     </S_Ticker>
   )
 }
 
 // STYLE
-const minElementWidth = 300
+const padding = clampedLerp(10, 20, ...tickerRange, "px")
+const iconWidth = clampedLerp(30, 50, ...tickerRange, "px")
 
 const S_Ticker = styled.div`
-  min-width: ${minElementWidth}px;
-  padding: 20px;
+  min-width: ${minTickerWidth}px;
+  height: ${clampedLerp(60, 84, ...tickerRange, "px")};
+  padding: 0px ${padding}px;
   border-radius: 1rem;
 
   border: 2px solid ${({ theme }) => theme.tickerBorder};
-  font-size: 20px;
+  font-size: ${clampedLerp(16, 20, ...tickerRange, "px")};
   color: ${({ theme }) => theme.tickerFont};
 
   display: flex;
   justify-content: space-between;
   align-items: center;
+`
+
+const S_Left = styled.div`
+  min-width: 0px;
+
+  margin-right: ${padding}px;
+
+  display: flex;
+  align-items: center;
 
   div {
-    display: flex;
-    align-items: center;
+    min-width: 0px;
+    overflow-wrap: break-word;
   }
 
   svg {
-    width: 40px;
-    margin-right: 20px;
+    width: ${iconWidth}px;
+    height: ${iconWidth}px;
+    margin-right: ${padding}px;
   }
 
   img {
-    width: 40px;
-    margin-right: 20px;
+    width: ${iconWidth}px;
+    height: ${iconWidth}px;
+    margin-right: ${padding}px;
   }
 `

@@ -5,6 +5,8 @@ import SunSVG from "./SVGComponents/SunSVG"
 import MoonSVG from "./SVGComponents/MoonSVG"
 import { Theme } from "../styles/themes"
 import styled, { useTheme } from "styled-components"
+import { tickerRange } from "../styles/styledConstants"
+import { clampedLerp } from "../utilities/styledHelpers"
 
 export default function ThemeToggler({ setTheme }) {
   const [toDarkSound] = useState(() => new Audio(lightOff))
@@ -29,18 +31,22 @@ export default function ThemeToggler({ setTheme }) {
 }
 
 // STYLE
+const dim = clampedLerp(25, 50, ...tickerRange, "px")
+
 const ToggleThemeButton = styled.div`
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 16px;
+  right: ${clampedLerp(8, 16, ...tickerRange, "px")};
 
-  width: 50px;
-  height: 50px;
+  width: ${dim}px;
+  height: ${dim}px;
 
-  padding: 10px;
+  padding: ${clampedLerp(5, 10, ...tickerRange, "px")};
 
   border-radius: 50%;
-  border: 3px solid ${({ theme }) => theme.tickerFont};
+  border-width: ${clampedLerp(1, 3, ...tickerRange, "px")};
+  border-style: solid;
+  border-color: ${({ theme }) => theme.tickerFont};
   background-color: ${({ theme }) => theme.BG};
 
   cursor: pointer;

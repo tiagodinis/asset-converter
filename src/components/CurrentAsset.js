@@ -1,6 +1,8 @@
 import React from "react"
 import SmallArrowSVG from "./SVGComponents/SmallArrowSVG"
 import styled from "styled-components"
+import { tickerRange } from "../styles/styledConstants"
+import { clampedLerp } from "../utilities/styledHelpers"
 
 export default function CurrentAsset({
   asset,
@@ -24,8 +26,10 @@ export default function CurrentAsset({
 }
 
 // STYLE
+const iconDim = clampedLerp(18, 28, ...tickerRange, "px")
+
 const S_CurrentAssetBtn = styled.button`
-  margin-left: 16px;
+  margin-left: ${clampedLerp(8, 16, ...tickerRange, "px")};
 
   background: ${({ theme }) => theme.BG};
   border: none;
@@ -39,18 +43,20 @@ const S_CurrentAssetBtn = styled.button`
 `
 
 const S_BtnContent = styled.div`
-  padding: 8px 16px;
+  padding: ${clampedLerp(4, 8, ...tickerRange, "px")}
+    ${clampedLerp(8, 16, ...tickerRange, "px")};
 
   display: flex;
   align-items: center;
 
   img {
-    width: 28px;
-    margin-right: 10px;
+    width: ${iconDim}px;
+    height: ${iconDim}px;
+    margin-right: ${clampedLerp(5, 10, ...tickerRange, "px")};
   }
 
   svg {
-    width: 12px;
+    width: ${clampedLerp(8, 12, ...tickerRange, "px")};
     margin-left: 6px;
     fill: ${({ theme }) => theme.tickerFont};
     transform: rotate(${({ isOpen }) => (isOpen ? "180deg" : "0deg")});
@@ -58,7 +64,7 @@ const S_BtnContent = styled.div`
 `
 
 const S_Code = styled.div`
-  font-size: 18px;
+  font-size: ${clampedLerp(14, 18, ...tickerRange, "px")};
   font-weight: 500;
   color: ${({ theme }) => theme.tickerFont};
 `

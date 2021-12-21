@@ -4,6 +4,8 @@ import { CurrentAmount } from "./CurrentAmount"
 import CurrentAsset from "./CurrentAsset"
 import { AssetSearcher } from "./AssetSearcher"
 import styled from "styled-components"
+import { gridRange, tickerRange } from "../styles/styledConstants"
+import { clampedLerp } from "../utilities/styledHelpers"
 
 export default function InteractionHeader({
   amount,
@@ -103,10 +105,11 @@ const S_Wrapper = styled.div`
 `
 
 const S_CurrentWidget = styled.div`
-  margin-top: 80px;
-  padding: 12px 16px;
+  margin-top: ${clampedLerp(10, 80, ...gridRange, "px")};
+  padding: ${clampedLerp(6, 12, ...tickerRange, "px")}
+    ${clampedLerp(8, 16, ...tickerRange, "px")};
 
-  width: 500px;
+  width: ${clampedLerp(250, 500, ...tickerRange, "px")};
   height: fit-content;
 
   background: ${({ theme }) => theme.header};
@@ -118,7 +121,7 @@ const S_CurrentWidget = styled.div`
 
 const S_AssetSearcher = styled.div`
   position: absolute;
-  top: calc(100% + 20px);
+  top: calc(100% + 10px);
 
   width: 100%;
 

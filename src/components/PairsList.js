@@ -1,5 +1,7 @@
 import React from "react"
 import styled from "styled-components"
+import { minTickerWidth, gridRange } from "../styles/styledConstants"
+import { clampedLerp } from "../utilities/styledHelpers"
 import Throbber from "./Throbber"
 import Ticker from "./Ticker"
 
@@ -18,9 +20,7 @@ export default function PairsList({ amount, tickers }) {
 }
 
 // STYLE
-const minElementWidth = 300
-
-const topMargin = 40
+const topMargin = clampedLerp(20, 40, ...gridRange, "px")
 
 const S_ThrobberWrapper = styled.div`
   margin: ${topMargin}px 0px;
@@ -28,9 +28,9 @@ const S_ThrobberWrapper = styled.div`
 
 const S_Grid = styled.div`
   margin: ${topMargin}px 0px;
-  width: min(1000px, 80%);
+  width: ${clampedLerp(300, 1250, ...gridRange, "px")};
 
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(${minElementWidth}px, 1fr));
-  grid-gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(${minTickerWidth}px, 1fr));
+  grid-gap: ${clampedLerp(12, 24, ...gridRange, "px")};
 `
