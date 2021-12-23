@@ -40,6 +40,8 @@ const S_CurrentAssetBtn = styled.button`
   &:hover {
     background: ${({ theme }) => theme.assetHover};
   }
+
+  transition: 0.1s;
 `
 
 const S_BtnContent = styled.div`
@@ -60,6 +62,7 @@ const S_BtnContent = styled.div`
     margin-left: 6px;
     fill: ${({ theme }) => theme.tickerFont};
     transform: rotate(${({ isOpen }) => (isOpen ? "180deg" : "0deg")});
+    transition: 0.2s;
   }
 `
 

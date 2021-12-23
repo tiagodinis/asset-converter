@@ -13,7 +13,7 @@ export const AssetSearcher = React.forwardRef(
     }
 
     return (
-      <>
+      <FadeIn>
         <FadeIn>
           <S_SearchBar>
             <MagnifyingGlassSVG />
@@ -28,8 +28,8 @@ export const AssetSearcher = React.forwardRef(
         <S_AssetOptions>
           {assets &&
             assets.map((a) => (
-              <FadeIn>
-                <S_Asset key={a.code} onClick={() => selectNewAsset(a)}>
+              <FadeIn key={a.code}>
+                <S_Asset onClick={() => selectNewAsset(a)}>
                   <S_AssetLeft>
                     <img src={a.image} alt={`${a.code} asset symbol`} />
                     <div>{a.name}</div>
@@ -44,13 +44,14 @@ export const AssetSearcher = React.forwardRef(
             </S_ThrobberWrapper>
           )}
         </S_AssetOptions>
-      </>
+      </FadeIn>
     )
   }
 )
 
 // STYLE
 const _10 = clampedLerp(5, 10, ...tickerRange, "px")
+const _16 = clampedLerp(8, 16, ...tickerRange, "px")
 const _20 = clampedLerp(10, 20, ...tickerRange, "px")
 
 const S_SearchBar = styled.div`
@@ -83,7 +84,7 @@ const S_Search = styled.input`
 `
 
 const S_AssetOptions = styled.div`
-  margin: ${_10}px 0px;
+  margin: 10px 0px;
 
   max-height: 300px;
 
@@ -91,7 +92,7 @@ const S_AssetOptions = styled.div`
 `
 
 const S_Asset = styled.div`
-  padding: ${_10}px 15px;
+  padding: ${_16}px;
 
   cursor: pointer;
 
