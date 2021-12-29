@@ -1,81 +1,57 @@
 import { useEffect, useState, useRef } from "react"
-import { useClickAway, useDebounce } from "react-use"
+import { useClickAway } from "react-use"
 import { CurrentAmount } from "./CurrentAmount"
 import CurrentAsset from "./CurrentAsset"
 import { AssetSearcher } from "./AssetSearcher"
 import styled from "styled-components"
-import { gridRange, tickerRange } from "../styles/styledConstants"
-import { clampedLerp } from "../utilities/styledHelpers"
+import {
+  clampedLerp,
+  doubler,
+  gridRange,
+  tickerRange,
+} from "../utilities/styledHelpers"
 
 export default function InteractionHeader({
-  amount,
-  setAmount,
-  assetMap,
+  setDebouncedAmount,
   asset,
+  assetMap,
   setAsset,
 }) {
   const [isOpen, setIsOpen] = useState(false)
-  const [search, setSearch] = useState("")
   const isHoveringCurrentAsset = useRef(null)
-  const currentAmountRef = useRef(null)
   const assetSearcherRef = useRef(null)
+  const currentAmountRef = useRef(null)
   const searchBarRef = useRef(null)
-  const [filteredAssets, setFilteredAssets] = useState()
 
-  useDebounce(() => setFilteredAssets(getFilteredAssets()), 250, [
-    search,
-    assetMap,
-  ])
-
-  function getFilteredAssets() {
-    if (!assetMap) return
-
-    let assetArr = [...assetMap.values()]
-    if (search) {
-      const lcSearch = search.toLowerCase()
-      assetArr = assetArr.filter(
-        (a) =>
-          a.code.toLowerCase().includes(lcSearch) ||
-          a.name.toLowerCase().includes(lcSearch) ||
-          a.type.toLowerCase().includes(lcSearch)
-      )
-    }
-
-    return assetArr
-  }
-
-  // Close searcher unless hovering currentAsset (let that component take over)
+  // Close AssetSearcher when clicking outside of it, unless user is hovering CurrentAsset
+  // In that case let CurrentAsset control the isOpen state
   useClickAway(assetSearcherRef, () => {
     if (!isHoveringCurrentAsset.current) setIsOpen(false)
   })
 
-  function setIsHoveringCurrentAsset(isHovering) {
-    isHoveringCurrentAsset.current = isHovering
-  }
-
-  function selectNewAsset(asset) {
-    setIsOpen(false)
-    setAsset(asset)
-  }
-
-  // Set initial focus based on asset search state
+  // Set focus based on AssetSearcher open state
   useEffect(() => {
     if (isOpen) searchBarRef.current.focus()
     else currentAmountRef.current.focus()
   }, [isOpen])
 
+  // Selecting an asset closes the AssetSearcher
+  function selectNewAsset(asset) {
+    setIsOpen(false)
+    setAsset(asset)
+  }
+
   return (
-    <S_Wrapper>
+    <S_InteractionHeader>
       <S_CurrentWidget>
         <CurrentAmount
           ref={currentAmountRef}
-          asset={asset}
-          amount={amount}
-          setAmount={setAmount}
+          precision={asset.formatting.precision}
+          setDebouncedAmount={setDebouncedAmount}
         />
         <CurrentAsset
           asset={asset}
-          setIsHoveringCurrentAsset={setIsHoveringCurrentAsset}
+          isHoveringCurrentAsset={isHoveringCurrentAsset}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
         />
@@ -85,20 +61,18 @@ export default function InteractionHeader({
         <S_AssetSearcher ref={assetSearcherRef}>
           <AssetSearcher
             ref={searchBarRef}
-            assets={filteredAssets}
+            assetMap={assetMap}
             selectNewAsset={selectNewAsset}
-            search={search}
-            setSearch={setSearch}
           />
         </S_AssetSearcher>
       )}
-    </S_Wrapper>
+    </S_InteractionHeader>
   )
 }
 
 // STYLE
-const S_Wrapper = styled.div`
-  position: relative;
+const S_InteractionHeader = styled.div`
+  position: relative; /* So that AssetSearcher pos is relative to InteractionHeader */
 
   display: flex;
   flex-direction: column;
@@ -106,10 +80,9 @@ const S_Wrapper = styled.div`
 
 const S_CurrentWidget = styled.div`
   margin-top: ${clampedLerp(10, 80, ...gridRange, "px")};
-  padding: ${clampedLerp(6, 12, ...tickerRange, "px")}
-    ${clampedLerp(8, 16, ...tickerRange, "px")};
+  padding: ${doubler(6, tickerRange)} ${doubler(8, tickerRange)};
 
-  width: ${clampedLerp(250, 500, ...tickerRange, "px")};
+  width: ${doubler(250, tickerRange)};
   height: fit-content;
 
   background: ${({ theme }) => theme.header};

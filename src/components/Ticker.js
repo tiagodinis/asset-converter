@@ -1,9 +1,13 @@
+import { cleanAmount, formatAmount } from "../utilities/amountFormatting"
+import FadeIn from "./HOCs/FadeIn"
 import QuestionMarkSVG from "./SVGComponents/QuestionMarkSVG"
 import styled from "styled-components"
-import { cleanAmount, formatAmount } from "../utilities/amountFormatting"
-import { minTickerWidth, tickerRange } from "../styles/styledConstants"
-import { clampedLerp } from "../utilities/styledHelpers"
-import FadeIn from "./HOCs/FadeIn"
+import {
+  clampedLerp,
+  doubler,
+  minTickerWidth,
+  tickerRange,
+} from "../utilities/styledHelpers"
 
 export default function Ticker({ amount, ticker }) {
   function getTickerValue() {
@@ -25,8 +29,12 @@ export default function Ticker({ amount, ticker }) {
             <img src={ticker.image} alt={`${ticker.code} asset symbol`} />
           </FadeIn>
         )}
-        {!ticker.image && <QuestionMarkSVG />}
-        <div>{getTickerValue()}</div>
+        {!ticker.image && (
+          <div>
+            <QuestionMarkSVG />
+          </div>
+        )}
+        <S_TickerValue>{getTickerValue()}</S_TickerValue>
       </S_Left>
       {ticker.code}
     </S_Ticker>
@@ -34,8 +42,8 @@ export default function Ticker({ amount, ticker }) {
 }
 
 // STYLE
-const padding = clampedLerp(10, 20, ...tickerRange, "px")
-const iconWidth = clampedLerp(30, 50, ...tickerRange, "px")
+const padding = doubler(10, tickerRange)
+const iconDims = doubler(25, tickerRange)
 
 const S_Ticker = styled.div`
   min-width: ${minTickerWidth}px;
@@ -60,20 +68,20 @@ const S_Left = styled.div`
   display: flex;
   align-items: center;
 
-  div {
-    min-width: 0px;
-    overflow-wrap: break-word;
-  }
-
   svg {
-    width: ${iconWidth}px;
-    height: ${iconWidth}px;
+    width: ${iconDims}px;
+    height: ${iconDims}px;
     margin-right: ${padding}px;
   }
 
   img {
-    width: ${iconWidth}px;
-    height: ${iconWidth}px;
+    width: ${iconDims}px;
+    height: ${iconDims}px;
     margin-right: ${padding}px;
   }
+`
+
+const S_TickerValue = styled.div`
+  min-width: 0px;
+  overflow-wrap: break-word;
 `

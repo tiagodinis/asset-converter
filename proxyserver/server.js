@@ -7,8 +7,8 @@ app.use(cors())
 
 const targetApi = "https://api-sandbox.uphold.com/v0"
 
-function setProxyRequest(uri) {
-  app.get(uri, async (req, res) => {
+function setProxyRequest(path) {
+  app.get(path, async (req, res) => {
     let options = {}
     if (req.headers.range) options = { headers: { Range: req.headers.range } }
     const response = await fetch(targetApi + req.path, options)

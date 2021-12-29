@@ -1,73 +1,80 @@
 import React, { useRef, useEffect, useState } from "react"
+import { usePairs } from "../hooks/upholdData"
 import { useWindowSize } from "react-use"
-import styled from "styled-components"
-import { minTickerWidth, gridRange } from "../styles/styledConstants"
-import { clampedLerp } from "../utilities/styledHelpers"
 import FadeIn from "./HOCs/FadeIn"
-import Throbber from "./Throbber"
 import Ticker from "./Ticker"
+import Throbber from "./Throbber"
+import styled from "styled-components"
+import {
+  clampedLerp,
+  minTickerWidth,
+  gridRange,
+  tickerRange,
+  doubler,
+} from "../utilities/styledHelpers"
 
-const block = 40
-const tickerFadeInDelay = 30
+const nrPairsInBlock = 40
+const pairFadeInDelay = 30
 const maxYSkew = 2
 
-export default function PairsList({ amount, tickers }) {
-  const { width } = useWindowSize()
+export default function PairsList({ amount, assetMap, asset }) {
+  const pairs = usePairs(assetMap, asset)
+  const observer = useRef()
+  const showMoreTriggerRef = useRef()
+  const [nrPairs, setNrPairs] = useState(nrPairsInBlock)
   const gridRef = useRef()
   const skewAnimRef = useRef()
   const prevPageY = useRef(window.pageYOffset)
-  const observer = useRef()
-  const showMoreTriggerRef = useRef()
-  const [nrTickers, setNrTickers] = useState(block)
+  const { width } = useWindowSize()
 
+  // Visual lazy loading of asset pairs on scroll
   useEffect(() => {
-    if (!tickers) return
+    if (!pairs) return
 
-    setNrTickers(block)
+    setNrPairs(nrPairsInBlock)
 
     observer.current = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting)
-        setNrTickers((prev) => Math.min(prev + block, tickers.length))
+        setNrPairs((prev) => Math.min(prev + nrPairsInBlock, pairs.length))
     })
 
     observer.current.observe(showMoreTriggerRef.current)
 
     return () => observer.current.disconnect()
-  }, [tickers])
+  }, [pairs])
 
-  function step() {
-    const newPageY = window.pageYOffset
-    const diff = newPageY - prevPageY.current
-    prevPageY.current = newPageY
-    const skew = Math.max(Math.min(diff * 0.35, maxYSkew), -maxYSkew)
-
-    gridRef.current.style.transform = `skewY(${skew}deg)`
-
-    skewAnimRef.current = requestAnimationFrame(step)
-  }
-
+  // Skew animation when scrolling small screens
   useEffect(() => {
+    function step() {
+      const newPageY = window.pageYOffset
+      const diff = newPageY - prevPageY.current
+      prevPageY.current = newPageY
+      const skew = Math.max(Math.min(diff * 0.35, maxYSkew), -maxYSkew)
+
+      gridRef.current.style.transform = `skewY(${skew}deg)`
+
+      skewAnimRef.current = requestAnimationFrame(step)
+    }
+
     if (skewAnimRef.current) cancelAnimationFrame(skewAnimRef.current)
-    if (width < 700) skewAnimRef.current = requestAnimationFrame(step)
+    if (width < tickerRange[1])
+      skewAnimRef.current = requestAnimationFrame(step)
     return () => cancelAnimationFrame(skewAnimRef.current)
   }, [width])
 
   const getFadeInDelay = (index) =>
-    tickerFadeInDelay * Math.max(0, index - (nrTickers - block))
+    pairFadeInDelay * Math.max(0, index - (nrPairs - nrPairsInBlock))
 
   return (
     <S_Grid ref={gridRef}>
-      {tickers && (
-        <>
-          {tickers.slice(0, nrTickers).map((t, index) => (
-            <FadeIn key={t.code} duration={1000} delay={getFadeInDelay(index)}>
-              <Ticker amount={amount} ticker={t} />
-            </FadeIn>
-          ))}
-          <S_ShowMoreTrigger ref={showMoreTriggerRef} />
-        </>
-      )}
-      {!tickers && (
+      {pairs &&
+        pairs.slice(0, nrPairs).map((t, index) => (
+          <FadeIn key={t.code} duration={1000} delay={getFadeInDelay(index)}>
+            <Ticker amount={amount} ticker={t} />
+          </FadeIn>
+        ))}
+      {pairs && <S_ShowMoreTrigger ref={showMoreTriggerRef} />}
+      {!pairs && (
         <S_ThrobberWrapper>
           <Throbber />
         </S_ThrobberWrapper>
@@ -80,7 +87,7 @@ export default function PairsList({ amount, tickers }) {
 const S_Grid = styled.div`
   position: relative;
 
-  margin: ${clampedLerp(20, 40, ...gridRange, "px")} 0px;
+  margin: ${doubler(20, gridRange)} 0px;
   width: ${clampedLerp(300, 1250, ...gridRange, "px")};
 
   transition: transform 0.5s cubic-bezier(0, 0, 0, 1);
@@ -88,7 +95,7 @@ const S_Grid = styled.div`
 
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(${minTickerWidth}px, 1fr));
-  grid-gap: ${clampedLerp(12, 24, ...gridRange, "px")};
+  grid-gap: ${doubler(12, gridRange)};
 `
 
 const S_ShowMoreTrigger = styled.div`

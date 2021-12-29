@@ -1,26 +1,26 @@
-import React, { useRef } from "react"
-import styled from "styled-components"
+import React, { useState, useEffect } from "react"
+import { useDebounce } from "react-use"
 import { cleanAmount, formatAmount } from "../utilities/amountFormatting"
-import { tickerRange } from "../styles/styledConstants"
-import { clampedLerp } from "../utilities/styledHelpers"
+import { clampedLerp, tickerRange } from "../utilities/styledHelpers"
+import styled from "styled-components"
 
 export const CurrentAmount = React.forwardRef(
-  ({ asset, amount, setAmount }, ref) => {
-    const formattedAmount = useRef(formatAmount(amount))
+  ({ precision, setDebouncedAmount }, ref) => {
+    const [amount, setAmount] = useState("")
 
-    function handleAmountChange(e) {
-      let cleanedStr = cleanAmount(e.target.value, asset.formatting.precision)
-      setAmount(cleanedStr)
+    useDebounce(() => setDebouncedAmount(amount), 250, [amount])
 
-      formattedAmount.current = formatAmount(cleanedStr)
-    }
+    useEffect(
+      () => setAmount(cleanAmount(amount, precision)),
+      [amount, precision]
+    )
 
     return (
       <S_Amount
         ref={ref}
         placeholder="0"
-        value={formattedAmount.current}
-        onChange={handleAmountChange}
+        value={formatAmount(amount)}
+        onChange={(e) => setAmount(cleanAmount(e.target.value, precision))}
       />
     )
   }

@@ -1,20 +1,19 @@
 import React from "react"
 import SmallArrowSVG from "./SVGComponents/SmallArrowSVG"
 import styled from "styled-components"
-import { tickerRange } from "../styles/styledConstants"
-import { clampedLerp } from "../utilities/styledHelpers"
+import { clampedLerp, doubler, tickerRange } from "../utilities/styledHelpers"
 
 export default function CurrentAsset({
   asset,
   isOpen,
   setIsOpen,
-  setIsHoveringCurrentAsset,
+  isHoveringCurrentAsset,
 }) {
   return (
     <S_CurrentAssetBtn
       onClick={() => setIsOpen(!isOpen)}
-      onMouseEnter={() => setIsHoveringCurrentAsset(true)}
-      onMouseLeave={() => setIsHoveringCurrentAsset(false)}
+      onMouseEnter={() => (isHoveringCurrentAsset.current = true)}
+      onMouseLeave={() => (isHoveringCurrentAsset.current = false)}
     >
       <S_BtnContent isOpen={isOpen}>
         <img src={asset.image} alt={`${asset.code} asset symbol`} />
@@ -26,10 +25,11 @@ export default function CurrentAsset({
 }
 
 // STYLE
-const iconDim = clampedLerp(18, 28, ...tickerRange, "px")
+const iconDims = clampedLerp(18, 28, ...tickerRange, "px")
+const _16 = doubler(8, tickerRange)
 
 const S_CurrentAssetBtn = styled.button`
-  margin-left: ${clampedLerp(8, 16, ...tickerRange, "px")};
+  margin-left: ${_16}px;
 
   background: ${({ theme }) => theme.BG};
   border: none;
@@ -45,16 +45,15 @@ const S_CurrentAssetBtn = styled.button`
 `
 
 const S_BtnContent = styled.div`
-  padding: ${clampedLerp(4, 8, ...tickerRange, "px")}
-    ${clampedLerp(8, 16, ...tickerRange, "px")};
+  padding: ${doubler(4, tickerRange)} ${_16}px;
 
   display: flex;
   align-items: center;
 
   img {
-    width: ${iconDim}px;
-    height: ${iconDim}px;
-    margin-right: ${clampedLerp(5, 10, ...tickerRange, "px")};
+    width: ${iconDims}px;
+    height: ${iconDims}px;
+    margin-right: ${doubler(5, tickerRange)};
   }
 
   svg {

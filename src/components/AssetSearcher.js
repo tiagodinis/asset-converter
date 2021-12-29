@@ -1,15 +1,36 @@
-import React from "react"
-import MagnifyingGlassSVG from "./SVGComponents/MagnifyingGlassSVG"
-import styled from "styled-components"
-import Throbber from "./Throbber"
-import { tickerRange } from "../styles/styledConstants"
-import { clampedLerp } from "../utilities/styledHelpers"
+import React, { useState } from "react"
+import { useDebounce } from "react-use"
 import FadeIn from "./HOCs/FadeIn"
+import MagnifyingGlassSVG from "./SVGComponents/MagnifyingGlassSVG"
+import Throbber from "./Throbber"
+import styled from "styled-components"
+import { clampedLerp, doubler, tickerRange } from "../utilities/styledHelpers"
 
 export const AssetSearcher = React.forwardRef(
-  ({ assets, selectNewAsset, search, setSearch }, ref) => {
-    function handleSearchChange(e) {
-      setSearch(e.target.value)
+  ({ assetMap, selectNewAsset }, ref) => {
+    const [search, setSearch] = useState("")
+    const [filteredAssets, setFilteredAssets] = useState(getFilteredAssets())
+
+    useDebounce(() => setFilteredAssets(getFilteredAssets()), 250, [
+      search,
+      assetMap,
+    ])
+
+    function getFilteredAssets() {
+      if (!assetMap) return
+
+      let assetArr = [...assetMap.values()]
+      if (search) {
+        const lcSearch = search.toLowerCase()
+        assetArr = assetArr.filter(
+          (a) =>
+            a.code.toLowerCase().includes(lcSearch) ||
+            a.name.toLowerCase().includes(lcSearch) ||
+            a.type.toLowerCase().includes(lcSearch)
+        )
+      }
+
+      return assetArr
     }
 
     return (
@@ -21,13 +42,13 @@ export const AssetSearcher = React.forwardRef(
               ref={ref}
               placeholder="Search asset"
               value={search}
-              onChange={handleSearchChange}
+              onChange={(e) => setSearch(e.target.value)}
             />
           </S_SearchBar>
         </FadeIn>
         <S_AssetOptions>
-          {assets &&
-            assets.map((a) => (
+          {filteredAssets &&
+            filteredAssets.map((a) => (
               <FadeIn key={a.code}>
                 <S_Asset onClick={() => selectNewAsset(a)}>
                   <S_AssetLeft>
@@ -38,7 +59,7 @@ export const AssetSearcher = React.forwardRef(
                 </S_Asset>
               </FadeIn>
             ))}
-          {!assets && (
+          {!filteredAssets && (
             <S_ThrobberWrapper>
               <Throbber />
             </S_ThrobberWrapper>
@@ -50,9 +71,9 @@ export const AssetSearcher = React.forwardRef(
 )
 
 // STYLE
-const _10 = clampedLerp(5, 10, ...tickerRange, "px")
-const _16 = clampedLerp(8, 16, ...tickerRange, "px")
-const _20 = clampedLerp(10, 20, ...tickerRange, "px")
+const _10 = doubler(5, tickerRange)
+const _16 = doubler(8, tickerRange)
+const _20 = doubler(10, tickerRange)
 
 const S_SearchBar = styled.div`
   margin: ${_10}px;
@@ -66,7 +87,7 @@ const S_SearchBar = styled.div`
 
   svg {
     width: 30px;
-    margin-left: ${clampedLerp(6, 12, ...tickerRange, "px")};
+    margin-left: ${doubler(6, tickerRange)};
     fill: ${({ theme }) => theme.tickerFont};
   }
 `

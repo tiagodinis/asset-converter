@@ -1,10 +1,9 @@
+import { useState } from "react"
+import { useAssets } from "../hooks/upholdData"
 import InteractionHeader from "./InteractionHeader"
 import PairsList from "./PairsList"
-import styled from "styled-components"
-import { useState } from "react"
-import { useDebounce } from "react-use"
-import useUpholdData from "../hooks/useUpholdData"
 import ThemeToggler from "./ThemeToggler"
+import styled from "styled-components"
 
 const initialAsset = {
   code: "USD",
@@ -21,23 +20,20 @@ const initialAsset = {
 }
 
 export default function Converter({ setTheme }) {
-  const [asset, setAsset] = useState(initialAsset)
-  const [amount, setAmount] = useState("")
   const [debouncedAmount, setDebouncedAmount] = useState("")
-  useDebounce(() => setDebouncedAmount(amount), 250, [amount])
+  const [asset, setAsset] = useState(initialAsset)
 
-  const { assets, tickers } = useUpholdData(asset)
+  const assetMap = useAssets()
 
   return (
     <S_Converter>
       <InteractionHeader
-        amount={amount}
-        setAmount={setAmount}
-        assetMap={assets.data}
+        setDebouncedAmount={setDebouncedAmount}
         asset={asset}
+        assetMap={assetMap}
         setAsset={setAsset}
       />
-      <PairsList amount={debouncedAmount} tickers={tickers.data?.pairs} />
+      <PairsList amount={debouncedAmount} assetMap={assetMap} asset={asset} />
       <ThemeToggler setTheme={setTheme} />
     </S_Converter>
   )

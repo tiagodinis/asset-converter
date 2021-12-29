@@ -1,5 +1,5 @@
-import styled, { keyframes } from "styled-components"
 import LoadingCircleSVG from "./SVGComponents/LoadingCircleSVG"
+import styled, { keyframes } from "styled-components"
 
 export default function Throbber() {
   return (
