@@ -53,9 +53,9 @@ export function usePairs(assetMap, asset) {
     let newPairs = []
     rawTickers.data
       // Filter pairs bidirectional rates (just need rate in one direction)
-      .filter((rt) => rt.currency !== asset.code)
       // Trim and store additional data (code from rt.pair, image and formatting from assetMap)
       .forEach((rt) => {
+        if (rt.currency === asset.code) return
         let sliceIndex = asset.code.length
         if (rt.pair[sliceIndex] === "-") sliceIndex++
         let code = rt.pair.slice(sliceIndex)
