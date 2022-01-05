@@ -1,6 +1,12 @@
-# Features
+<h1 align="center">Asset Converter</h1>
 
-## MVP
+<p align="center">Simple asset converter using <a href="https://uphold.com">Uphold's</a>
+ api</p>
+
+![side_by_side](https://user-images.githubusercontent.com/7140651/148213927-b0d0e2b0-06b4-4b15-8ca5-52fbc9f18391.png)
+
+
+## MVP features
 
 ✔️ Searching and choosing asset for given amount
 
@@ -27,7 +33,5 @@
 To run the app locally
 
     git clone https://github.com/tiagodinis/asset-converter
-    npm i
-    cd proxyserver/
-    npm i
+    npm run install-deps
     npm run dev
